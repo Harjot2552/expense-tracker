@@ -28,6 +28,10 @@ export default function Expenses() {
                 name: expenseName, amount: expenseAmount, category: expenseCategory, date: expenseDate
             }])
         }
+        expenseName("")
+        expenseAmount("")
+        expenseDate("")
+        expenseCategory("")
 
 
     }
@@ -98,7 +102,7 @@ export default function Expenses() {
                 {expenses.map((expense, index)=>(
                 <tr key={index}>
                     <td>{expense.name}</td>
-                    <td>{expense.amount}</td>
+                    <td>{expense.amount.toFixed(2)}</td>
                     <td>{expense.date}</td>
                     <td>{expense.category}</td>
                 </tr>
