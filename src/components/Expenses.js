@@ -48,6 +48,12 @@ export default function Expenses() {
 
 
 
+    const handleDeleteExpense = (index) => {
+        const newExpenses = [...expenses]; 
+        newExpenses.splice(index, 1); 
+        setExpenses(newExpenses);
+    };
+
 
 
     return (
@@ -81,9 +87,14 @@ export default function Expenses() {
                     value={expenseCategory}
                 >
                     <option defaultValue>Open this select menu</option>
-                    <option value="1">One</option>
-                    <option value="2">Two</option>
-                    <option value="3">Three</option>
+                    <option value="Housing">Housing</option>
+                    <option value="Insurance">Insurance</option>
+                    <option value="Food">Food</option>
+                    <option value="Entertainment">Entertainment</option>
+                    <option value="Health care">Health care</option>
+                    <option value="Gas">Gas</option>
+                    <option value="Clothing">Clothing</option>
+                    <option value="Pet">Pet</option>
                 </select>
 
                 <label htmlFor="expenseDate" className="form-label">Expense Date</label>
