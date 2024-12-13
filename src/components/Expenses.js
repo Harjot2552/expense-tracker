@@ -28,13 +28,24 @@ export default function Expenses() {
                 name: expenseName, amount: expenseAmount, category: expenseCategory, date: expenseDate
             }])
         }
-        expenseName("")
-        expenseAmount("")
-        expenseDate("")
-        expenseCategory("")
+        setExpenseName("")
+        setExpenseAmount("")
+        setexpenseDate("")
+        setexpenseCategory("")
 
 
     }
+
+    const calculateTotal = () =>{
+        let total  = 0;
+        expenses.forEach((expense)=>(
+            total += expense.amount
+
+        ))
+
+        return total;
+    }
+
 
 
 
@@ -61,15 +72,15 @@ export default function Expenses() {
                     id="expenseAmount"
                     placeholder="Amount of the expense"
                 />
-
+            <label htmlFor="expenseCategory" className="form-label">Expense Category</label>
                 <select
                     onChange={handleOnChangeForexpenseCategory}
-                    class="form-select"
+                    className="form-select"
                     aria-label="Default select example"
                     id='expenseCategory'
                     value={expenseCategory}
                 >
-                    <option selected>Open this select menu</option>
+                    <option defaultValue>Open this select menu</option>
                     <option value="1">One</option>
                     <option value="2">Two</option>
                     <option value="3">Three</option>
@@ -102,7 +113,7 @@ export default function Expenses() {
                 {expenses.map((expense, index)=>(
                 <tr key={index}>
                     <td>{expense.name}</td>
-                    <td>{expense.amount.toFixed(2)}</td>
+                    <td>{expense.amount}</td>
                     <td>{expense.date}</td>
                     <td>{expense.category}</td>
                 </tr>
@@ -112,7 +123,7 @@ export default function Expenses() {
 
 
             <div className="mt-3">
-                <h4>Total Spent</h4>
+                <h4>Total Spent: ${calculateTotal()}</h4>
             </div>
         </div>
     );
