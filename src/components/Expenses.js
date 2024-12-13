@@ -127,6 +127,9 @@ export default function Expenses() {
                     <td>{expense.amount}</td>
                     <td>{expense.date}</td>
                     <td>{expense.category}</td>
+                    <td>
+                        <button className='btn btn-danger' onClick={() => handleDeleteExpense(index)}>Delete</button>
+                    </td>
                 </tr>
                 ))}
                 </tbody>
