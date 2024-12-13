@@ -4,6 +4,7 @@ export default function Expenses() {
     const [expenseName, setExpenseName] = useState("");
     const [expenseAmount, setExpenseAmount] = useState("");
     const [expenseCategory, setexpenseCategory] = useState("");
+    const [expenseDate, setexpenseDate] = useState("")
     const [expenses, setExpenses] = useState([])
 
 
@@ -13,6 +14,9 @@ export default function Expenses() {
 
     const handleOnChangeForAmount = (e) => {
         setExpenseAmount(e.target.value);
+    };
+    const handleOnChangeForExpenseDate = (e) => {
+        setexpenseDate(e.target.value);
     };
     const handleOnChangeForexpenseCategory = (e) => {
         setexpenseCategory(e.target.value);
@@ -64,6 +68,15 @@ export default function Expenses() {
                 <option value="2">Two</option>
                 <option value="3">Three</option>
                 </select>
+
+                <label htmlFor="expenseDate" className="form-label">Expense Date</label>
+                <input
+                  onChange={handleOnChangeForExpenseDate}
+                  value={expenseDate}
+                    type="date"
+                    className="form-control"
+                    id="expenseDate"
+                />
 
 
             </div>
