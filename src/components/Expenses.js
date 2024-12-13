@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 export default function Expenses() {
     const [expenseName, setExpenseName] = useState("");
@@ -7,6 +7,19 @@ export default function Expenses() {
     const [expenseDate, setexpenseDate] = useState("")
     const [expenses, setExpenses] = useState([])
 
+
+    useEffect(() => {
+        let fetchCurrency = async () => {
+            let api_url = `https://api.currencyapi.com/v3/latest?apikey=cur_live_zTf2ZYghFVtK8XLESQBRg5YjN30Pekz2LfIth5X3&base_currency=USD`
+
+            const response = await fetch(api_url)
+            const result = await response.json()
+            console.log(result)
+        }
+
+        fetchCurrency();
+
+    }, [])
 
     const handleOnChange = (e) => {
         setExpenseName(e.target.value);
@@ -22,9 +35,11 @@ export default function Expenses() {
         setexpenseCategory(e.target.value);
     };
 
+
     const handleAddExpense = () => {
         if (expenseName && expenseAmount && expenseCategory && expenseDate) {
-            setExpenses([{...expenses,
+            setExpenses([{
+                ...expenses,
                 name: expenseName, amount: expenseAmount, category: expenseCategory, date: expenseDate
             }])
         }
@@ -36,9 +51,9 @@ export default function Expenses() {
 
     }
 
-    const calculateTotal = () =>{
-        let total  = 0;
-        expenses.forEach((expense)=>(
+    const calculateTotal = () => {
+        let total = 0;
+        expenses.forEach((expense) => (
             total += expense.amount
 
         ))
@@ -47,10 +62,14 @@ export default function Expenses() {
     }
 
 
+    const handleCovertCurrency = () => {
+
+    }
+
 
     const handleDeleteExpense = (index) => {
-        const newExpenses = [...expenses]; 
-        newExpenses.splice(index, 1); 
+        const newExpenses = [...expenses];
+        newExpenses.splice(index, 1);
         setExpenses(newExpenses);
     };
 
@@ -78,7 +97,7 @@ export default function Expenses() {
                     id="expenseAmount"
                     placeholder="Amount of the expense"
                 />
-            <label htmlFor="expenseCategory" className="form-label">Expense Category</label>
+                <label htmlFor="expenseCategory" className="form-label">Expense Category</label>
                 <select
                     onChange={handleOnChangeForexpenseCategory}
                     className="form-select"
@@ -110,6 +129,19 @@ export default function Expenses() {
             </div>
             <button onClick={handleAddExpense} type='button' className="btn btn-primary">Add</button>
 
+
+            <label htmlFor="currencyConvert" className="form-label">Convert To:</label>
+            <select
+                onChange={handleCovertCurrency}
+                className="form-select"
+                aria-label="Default select example"
+                id='currencyConvert'
+            >
+                <option value="CAD">CAD</option>
+                <option value="EUR">EUR</option>
+                <option value="INR">INR</option>
+            </select>
+
             <table id='table' className="table mt-3">
                 <thead>
                     <tr>
@@ -121,17 +153,17 @@ export default function Expenses() {
                     </tr>
                 </thead>
                 <tbody>
-                {expenses.map((expense, index)=>(
-                <tr key={index}>
-                    <td>{expense.name}</td>
-                    <td>{expense.amount}</td>
-                    <td>{expense.date}</td>
-                    <td>{expense.category}</td>
-                    <td>
-                        <button className='btn btn-danger' onClick={() => handleDeleteExpense(index)}>Delete</button>
-                    </td>
-                </tr>
-                ))}
+                    {expenses.map((expense, index) => (
+                        <tr key={index}>
+                            <td>{expense.name}</td>
+                            <td>{expense.amount}</td>
+                            <td>{expense.date}</td>
+                            <td>{expense.category}</td>
+                            <td>
+                                <button className='btn btn-danger' onClick={() => handleDeleteExpense(index)}>Delete</button>
+                            </td>
+                        </tr>
+                    ))}
                 </tbody>
             </table>
 
