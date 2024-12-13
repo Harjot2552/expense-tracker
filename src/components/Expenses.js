@@ -23,11 +23,13 @@ export default function Expenses() {
     };
 
     const handleAddExpense = () => {
-        if(expenseName && expenseAmount && expenseCategory){
-            setExpenses([{
-               name: expenseName, amount: expenseAmount, category: expenseCategory,     
+        if (expenseName && expenseAmount && expenseCategory && expenseDate) {
+            setExpenses([{...expenses,
+                name: expenseName, amount: expenseAmount, category: expenseCategory, date: expenseDate
             }])
         }
+
+
     }
 
 
@@ -56,23 +58,23 @@ export default function Expenses() {
                     placeholder="Amount of the expense"
                 />
 
-                <select 
-                onChange={handleOnChangeForexpenseCategory}
-                class="form-select" 
-                aria-label="Default select example"
-                id='expenseCategory'
-                value={expenseCategory}
+                <select
+                    onChange={handleOnChangeForexpenseCategory}
+                    class="form-select"
+                    aria-label="Default select example"
+                    id='expenseCategory'
+                    value={expenseCategory}
                 >
-                <option selected>Open this select menu</option>
-                <option value="1">One</option>
-                <option value="2">Two</option>
-                <option value="3">Three</option>
+                    <option selected>Open this select menu</option>
+                    <option value="1">One</option>
+                    <option value="2">Two</option>
+                    <option value="3">Three</option>
                 </select>
 
                 <label htmlFor="expenseDate" className="form-label">Expense Date</label>
                 <input
-                  onChange={handleOnChangeForExpenseDate}
-                  value={expenseDate}
+                    onChange={handleOnChangeForExpenseDate}
+                    value={expenseDate}
                     type="date"
                     className="form-control"
                     id="expenseDate"
@@ -93,7 +95,14 @@ export default function Expenses() {
                     </tr>
                 </thead>
                 <tbody>
-
+                {expenses.map((expense, index)=>(
+                <tr key={index}>
+                    <td>{expense.name}</td>
+                    <td>{expense.amount}</td>
+                    <td>{expense.date}</td>
+                    <td>{expense.category}</td>
+                </tr>
+                ))}
                 </tbody>
             </table>
 
