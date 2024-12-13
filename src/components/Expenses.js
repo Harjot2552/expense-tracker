@@ -4,6 +4,7 @@ export default function Expenses() {
     const [expenseName, setExpenseName] = useState("");
     const [expenseAmount, setExpenseAmount] = useState("");
     const [expenseCategory, setexpenseCategory] = useState("");
+    const [expenses, setExpenses] = useState([])
 
 
     const handleOnChange = (e) => {
@@ -14,11 +15,15 @@ export default function Expenses() {
         setExpenseAmount(e.target.value);
     };
     const handleOnChangeForexpenseCategory = (e) => {
-        setExpenseAmount(e.target.value);
+        setexpenseCategory(e.target.value);
     };
 
     const handleAddExpense = () => {
-
+        if(expenseName && expenseAmount && expenseCategory){
+            setExpenses([{
+               name: expenseName, amount: expenseAmount, category: expenseCategory,     
+            }])
+        }
     }
 
 
