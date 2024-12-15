@@ -6,6 +6,10 @@ export default function Expenses() {
     const [expenseCategory, setexpenseCategory] = useState("");
     const [expenseDate, setexpenseDate] = useState("")
     const [expenses, setExpenses] = useState([])
+    
+  const [currencyRates, setCurrencyRates] = useState({});
+  const [selectedCurrency, setSelectedCurrency] = useState("USD");
+
 
 
     useEffect(() => {
@@ -18,6 +22,9 @@ export default function Expenses() {
         }
 
         fetchCurrency();
+
+
+
 
     }, [])
 
@@ -38,10 +45,10 @@ export default function Expenses() {
 
     const handleAddExpense = () => {
         if (expenseName && expenseAmount && expenseCategory && expenseDate) {
-            setExpenses([{
+            setExpenses([
                 ...expenses,
-                name: expenseName, amount: expenseAmount, category: expenseCategory, date: expenseDate
-            }])
+                { name: expenseName, amount: expenseAmount, category: expenseCategory, date: expenseDate },
+            ])
         }
         setExpenseName("")
         setExpenseAmount("")
@@ -61,10 +68,7 @@ export default function Expenses() {
         return total;
     }
 
-
-    const handleCovertCurrency = () => {
-
-    }
+    
 
 
     const handleDeleteExpense = (index) => {
@@ -130,17 +134,20 @@ export default function Expenses() {
             <button onClick={handleAddExpense} type='button' className="btn btn-primary">Add</button>
 
 
-            <label htmlFor="currencyConvert" className="form-label">Convert To:</label>
-            <select
-                onChange={handleCovertCurrency}
-                className="form-select"
-                aria-label="Default select example"
-                id='currencyConvert'
-            >
-                <option value="CAD">CAD</option>
-                <option value="EUR">EUR</option>
-                <option value="INR">INR</option>
-            </select>
+            <label htmlFor="currencyConvert" className="form-label">
+          Convert To:
+        </label>
+        <select
+          onChange={handleCurrencyChange}
+          className="form-select w-auto"
+          id="currencyConvert"
+          value={selectedCurrency}
+        >
+          <option value="USD">USD</option>
+          <option value="CAD">CAD</option>
+          <option value="EUR">EUR</option>
+          <option value="INR">INR</option>
+        </select>
 
             <table id='table' className="table mt-3">
                 <thead>
