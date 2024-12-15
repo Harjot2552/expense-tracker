@@ -45,18 +45,22 @@ export default function Expenses() {
 
     const handleAddExpense = () => {
         if (expenseName && expenseAmount && expenseCategory && expenseDate) {
-            setExpenses([
-                ...expenses,
-                { name: expenseName, amount: expenseAmount, category: expenseCategory, date: expenseDate },
-            ])
+          setExpenses([
+            ...expenses,
+            {
+              name: expenseName,
+              originalAmount: parseFloat(expenseAmount), // Save the original amount
+              amount: parseFloat(expenseAmount),
+              category: expenseCategory,
+              date: expenseDate,
+            },
+          ]);
         }
-        setExpenseName("")
-        setExpenseAmount("")
-        setexpenseDate("")
-        setexpenseCategory("")
-
-
-    }
+        setExpenseName("");
+        setExpenseAmount("");
+        setexpenseDate("");
+        setexpenseCategory("");
+      };
 
     const calculateTotal = () => {
         let total = 0;
@@ -68,6 +72,22 @@ export default function Expenses() {
         return total;
     }
 
+
+    const handleCurrencyChange = (e) => {
+        const newCurrency = e.target.value;
+        setSelectedCurrency(newCurrency);
+      };
+
+    useEffect(() => {
+        if (selectedCurrency && currencyRates[selectedCurrency]) {
+          const conversionRate = currencyRates[selectedCurrency].value;
+          const convertedExpenses = expenses.map((expense) => ({
+            ...expense,
+            amount: (expense.originalAmount * conversionRate).toFixed(2),
+          }));
+          setExpenses(convertedExpenses);
+        }
+      }, [selectedCurrency, currencyRates]);
     
 
 
