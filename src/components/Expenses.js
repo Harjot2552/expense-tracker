@@ -5,6 +5,8 @@ import { Chart as ChartJS, Title, Tooltip, Legend, ArcElement, CategoryScale, Li
 ChartJS.register(Title, Tooltip, Legend, ArcElement, CategoryScale, LinearScale);
 
 export default function Expenses() {
+
+    // Variable for all the input fields
     const [expenseName, setExpenseName] = useState("");
     const [expenseAmount, setExpenseAmount] = useState("");
     const [expenseCategory, setExpenseCategory] = useState("");
@@ -13,12 +15,14 @@ export default function Expenses() {
     const [selectedCurrency, setSelectedCurrency] = useState("USD");
     const [currencyRate, setCurrencyRate] = useState([]);
 
+    // Seeting up the values of the input fields pn change
     const handleOnChange = (e) => setExpenseName(e.target.value);;
     const handleOnChangeForAmount = (e) => setExpenseAmount(e.target.value);
     const handleOnChangeForExpenseDate = (e) => setExpenseDate(e.target.value);
     const handleOnChangeForExpenseCategory = (e) => setExpenseCategory(e.target.value);
     const handleSelectedCurrency = (e) => { setSelectedCurrency(e.target.value); convertExpense(e.target.value) }
 
+    // Function to fetch the currency rates
     const fetchCurrencyRates = async () => {
         const apiUrl = `https://api.currencyapi.com/v3/latest?apikey=cur_live_B1WwVRzOVeuPLPPrCzAhIPGvawR9dICdOIKSeNj1&base_currency=USD`;
         const response = await fetch(apiUrl);
@@ -26,6 +30,8 @@ export default function Expenses() {
         setCurrencyRate(result.data);
     };
 
+
+    // Function for adding all the input values in an array and clearing all the values of the input fields.
     const handleAddExpense = () => {
         if (expenseName && expenseAmount && expenseCategory && expenseDate) {
             setExpenses([
@@ -45,6 +51,8 @@ export default function Expenses() {
         setExpenseCategory("");
     };
 
+
+    // Calculating the total amount present in an array
     const calculateTotal = () => {
         let total = 0;
         expenses.map((exp) => (
@@ -53,6 +61,8 @@ export default function Expenses() {
         return total;
     };
 
+    // Converting the USD currency which is the default currency to the user selected currency using an api
+    // Grabing the orignal amount from an array and multiplying it to the conversion rate.
     const convertExpense = (currency) => {
         if (currency && currencyRate[currency]) {
             const conversionRate = currencyRate[currency].value;
@@ -68,17 +78,20 @@ export default function Expenses() {
         }
     }
 
+    // Handle to delete the item in array, in the first line copying an array then using the splice method to delete the given index
     const handleDeleteExpense = (index) => {
         const newExpenses = [...expenses];
         newExpenses.splice(index, 1);
         setExpenses(newExpenses);
     };
 
+    // Calling the fetchCurrencyRates function in useEffect
     useEffect(() => {
         fetchCurrencyRates();
     }, []);
 
 
+    // Calculating the category total using the array reduce method.
     const calculateCategoryTotals = () => {
         const categoryTotals = expenses.reduce((totals, expense) => {
             if (totals[expense.category]) {
@@ -89,7 +102,8 @@ export default function Expenses() {
             return totals;
         }, {});
 
-        const chartData = {
+    // Using npm package to show the data in form of pie chart, Object.Keys(categoryTotals) will be the name of the category and Object.values(categoryTotals) will be the total amount of that category
+    const chartData = {
             labels: Object.keys(categoryTotals),
             datasets: [{
                 data: Object.values(categoryTotals),
@@ -217,7 +231,6 @@ export default function Expenses() {
 
 
             <h4>Expense Breakdown by Category</h4>
-            {/* Add the Pie Chart with custom styling */}
             <div className="mt-4 d-flex justify-content-center align-items-center" style={{ maxWidth: '400px', margin: 'auto' }}>
                 <Pie data={calculateCategoryTotals()} options={{ responsive: true, maintainAspectRatio: true }} />
             </div>
