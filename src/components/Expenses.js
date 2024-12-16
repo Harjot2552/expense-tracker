@@ -9,7 +9,11 @@ export default function Expenses() {
     const [selectedCurrency, setSelectedCurrency] = useState("USD");
     const [currencyRate, setCurrencyRate] = useState([]);
 
-
+    const handleOnChange = (e) => setExpenseName(e.target.value);;
+    const handleOnChangeForAmount = (e) => setExpenseAmount(e.target.value);
+    const handleOnChangeForExpenseDate = (e) => setExpenseDate(e.target.value);
+    const handleOnChangeForExpenseCategory = (e) =>setExpenseCategory(e.target.value);
+    const handleSelectedCurrency = (e) => { setSelectedCurrency(e.target.value); convertExpense(e.target.value) }
 
     const fetchCurrencyRates = async () => {
         const apiUrl = `https://api.currencyapi.com/v3/latest?apikey=cur_live_B1WwVRzOVeuPLPPrCzAhIPGvawR9dICdOIKSeNj1&base_currency=USD`;
@@ -17,23 +21,6 @@ export default function Expenses() {
         const result = await response.json();
         setCurrencyRate(result.data);
     };
-
-    const handleOnChange = (e) => {
-        setExpenseName(e.target.value);
-    };
-
-    const handleOnChangeForAmount = (e) => {
-        setExpenseAmount(e.target.value);
-    };
-
-    const handleOnChangeForExpenseDate = (e) => {
-        setExpenseDate(e.target.value);
-    };
-
-    const handleOnChangeForExpenseCategory = (e) => {
-        setExpenseCategory(e.target.value);
-    };
-    const handleSelectedCurrency = (e) => { setSelectedCurrency(e.target.value); convertExpense(e.target.value) }
 
     const handleAddExpense = () => {
         if (expenseName && expenseAmount && expenseCategory && expenseDate) {
@@ -55,10 +42,12 @@ export default function Expenses() {
     };
 
     const calculateTotal = () => {
-        return expenses.reduce((total, expense) => total + parseFloat(expense.amount), 0).toFixed(2);
+        let total = 0;
+        expenses.map((exp)=>(
+            total += exp.amount
+        ));
+        return total;
     };
-
-
 
     const convertExpense = (currency) => {
         if ( currency && currencyRate[currency]) {
