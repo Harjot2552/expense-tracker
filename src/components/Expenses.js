@@ -6,16 +6,16 @@ export default function Expenses() {
     const [expenseCategory, setExpenseCategory] = useState("");
     const [expenseDate, setExpenseDate] = useState("");
     const [expenses, setExpenses] = useState([]);
-    const [currencyRates, setCurrencyRates] = useState([]);
     const [selectedCurrency, setSelectedCurrency] = useState("USD");
+    const [currencyRate, setCurrencyRate] = useState([]);
 
-   
+
 
     const fetchCurrencyRates = async () => {
-        const apiUrl = `https://api.currencyapi.com/v3/latest?apikey=cur_live_zTf2ZYghFVtK8XLESQBRg5YjN30Pekz2LfIth5X3&base_currency=USD`;
+        const apiUrl = `https://api.currencyapi.com/v3/latest?apikey=cur_live_B1WwVRzOVeuPLPPrCzAhIPGvawR9dICdOIKSeNj1&base_currency=USD`;
         const response = await fetch(apiUrl);
         const result = await response.json();
-        setCurrencyRates(result.data);
+        setCurrencyRate(result.data);
     };
 
     const handleOnChange = (e) => {
@@ -33,6 +33,7 @@ export default function Expenses() {
     const handleOnChangeForExpenseCategory = (e) => {
         setExpenseCategory(e.target.value);
     };
+    const handleSelectedCurrency = (e) => { setSelectedCurrency(e.target.value); convertExpense(e.target.value) }
 
     const handleAddExpense = () => {
         if (expenseName && expenseAmount && expenseCategory && expenseDate) {
@@ -57,21 +58,22 @@ export default function Expenses() {
         return expenses.reduce((total, expense) => total + parseFloat(expense.amount), 0).toFixed(2);
     };
 
-    const handleCurrencyChange = (e) => {
-        const newCurrency = e.target.value;
-        setSelectedCurrency(newCurrency);
-    };
 
-    useEffect(() => {
-        if (selectedCurrency && currencyRates[selectedCurrency]) {
-            const conversionRate = currencyRates[selectedCurrency].value;
-            const convertedExpenses = expenses.map((expense) => ({
-                ...expense,
-                amount: (expense.originalAmount * conversionRate).toFixed(2),
-            }));
-            setExpenses(convertedExpenses);
+
+    const convertExpense = (currency) => {
+        if ( currency && currencyRate[currency]) {
+            const conversionRate = currencyRate[currency].value;
+            console.log(conversionRate);
+            const convertedAmount = expenses.map((expense) => (
+                {
+                    ...expense,
+                    amount: (expense.originalAmount * conversionRate).toFixed(2)
+                }
+            ));
+            console.log(convertedAmount);
+            setExpenses(convertedAmount)
         }
-    }, [selectedCurrency, currencyRates]);
+    }
 
     const handleDeleteExpense = (index) => {
         const newExpenses = [...expenses];
@@ -80,10 +82,9 @@ export default function Expenses() {
     };
 
     useEffect(() => {
-        
-
         fetchCurrencyRates();
     }, []);
+
 
     return (
         <div className="container mt-4">
@@ -155,12 +156,12 @@ export default function Expenses() {
                     Convert To:
                 </label>
                 <select
-                    onChange={handleCurrencyChange}
+                    onChange={handleSelectedCurrency}
                     className="form-select w-auto"
                     id="currencyConvert"
                     value={selectedCurrency}
                 >
-                    <option value="USD">USD</option>
+                    <option defaultValue>USD</option>
                     <option value="CAD">CAD</option>
                     <option value="EUR">EUR</option>
                     <option value="INR">INR</option>
