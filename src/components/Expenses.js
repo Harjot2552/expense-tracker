@@ -79,6 +79,11 @@ export default function Expenses() {
     }, []);
 
 
+    const categoryTotals = expenses.reduce((totals, expense) => {
+        totals[expense.category] = (totals[expense.category] || 0) + parseFloat(expense.amount);
+        return totals;
+      }, {});
+      
     return (
         <div className="container mt-4">
             <div className="row g-3">
