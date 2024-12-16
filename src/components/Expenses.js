@@ -16,7 +16,7 @@ export default function Expenses() {
     const handleOnChange = (e) => setExpenseName(e.target.value);;
     const handleOnChangeForAmount = (e) => setExpenseAmount(e.target.value);
     const handleOnChangeForExpenseDate = (e) => setExpenseDate(e.target.value);
-    const handleOnChangeForExpenseCategory = (e) =>setExpenseCategory(e.target.value);
+    const handleOnChangeForExpenseCategory = (e) => setExpenseCategory(e.target.value);
     const handleSelectedCurrency = (e) => { setSelectedCurrency(e.target.value); convertExpense(e.target.value) }
 
     const fetchCurrencyRates = async () => {
@@ -47,14 +47,14 @@ export default function Expenses() {
 
     const calculateTotal = () => {
         let total = 0;
-        expenses.map((exp)=>(
+        expenses.map((exp) => (
             total += exp.amount
         ));
         return total;
     };
 
     const convertExpense = (currency) => {
-        if ( currency && currencyRate[currency]) {
+        if (currency && currencyRate[currency]) {
             const conversionRate = currencyRate[currency].value;
             console.log(conversionRate);
             const convertedAmount = expenses.map((expense) => (
@@ -79,11 +79,26 @@ export default function Expenses() {
     }, []);
 
 
-    const categoryTotals = expenses.reduce((totals, expense) => {
-        totals[expense.category] = (totals[expense.category] || 0) + parseFloat(expense.amount);
-        return totals;
-      }, {});
-      
+    const calculateCategoryTotals = () => {
+        const categoryTotals = expenses.reduce((totals, expense) => {
+            if (totals[expense.category]) {
+                totals[expense.category] += expense.amount;
+            } else {
+                totals[expense.category] = expense.amount;
+            }
+            return totals;
+        }, {});
+
+        const chartData = {
+            labels: Object.keys(categoryTotals),
+            datasets: [{
+                data: Object.values(categoryTotals),
+                backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40', '#FF6347', '#8B4513'],
+            }],
+        };
+        return chartData;
+    }
+
     return (
         <div className="container mt-4">
             <div className="row g-3">
@@ -198,6 +213,13 @@ export default function Expenses() {
 
             <div className="mt-3">
                 <h4>Total Spent: {selectedCurrency} {calculateTotal()}</h4>
+            </div>
+
+
+            <h4>Expense Breakdown by Category</h4>
+            {/* Add the Pie Chart with custom styling */}
+            <div className="mt-4 d-flex justify-content-center align-items-center" style={{ maxWidth: '400px', margin: 'auto' }}>
+                <Pie data={calculateCategoryTotals()} options={{ responsive: true, maintainAspectRatio: true }} />
             </div>
         </div>
     );
