@@ -1,4 +1,8 @@
 import React, { useEffect, useState } from "react";
+import { Pie } from 'react-chartjs-2';
+import { Chart as ChartJS, Title, Tooltip, Legend, ArcElement, CategoryScale, LinearScale } from 'chart.js';
+
+ChartJS.register(Title, Tooltip, Legend, ArcElement, CategoryScale, LinearScale);
 
 export default function Expenses() {
     const [expenseName, setExpenseName] = useState("");
