@@ -17,8 +17,7 @@ An interactive and user-friendly expense tracker built with React, designed to h
 - **Chart.js**: For creating dynamic and interactive charts.
 - **React-ChartJS-2**: A wrapper for using Chart.js with React.
 - **CurrencyAPI**: For fetching real-time currency exchange rates.
-- **React-Scripts**: For managing builds and development processes.
-- **CSS**: For styling the application.
+- **Bootstrap**: For styling the application.
 
 ---
 
